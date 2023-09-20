@@ -22,7 +22,7 @@ const Disperse = () => {
     let lines: number[] = [];
     let err = "";
     arr.forEach((x) => {
-      address.push(x.split(" ")[0]);
+      address.push(x.split(delimiter)[0]);
     });
     let index = -1;
     let duplicateIndexArr: any = [];
