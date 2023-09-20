@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { sumOfArray, validateAmount } from "../utils";
 
 const Disperse = () => {
+  let delimiter = /[=,\s|]/;
   const [error, setError] = useState<string>();
 
   const [val, setVal] = useState<string>("");
@@ -47,7 +48,7 @@ const Disperse = () => {
     const arr = val.split("\n");
     console.log(arr);
 
-    const { isValid, index } = validateAmount(arr);
+    const { isValid, index } = validateAmount(arr, delimiter);
     if (!isValid) {
       setError(`Line number ${index + 1} wrong amount`);
       return;
@@ -83,8 +84,8 @@ const Disperse = () => {
   const duplicate: number[] = [];
 
   val.split("\n").forEach((x, i) => {
-    let key = x.split(" ")[0];
-    let val = x.split(" ")[1];
+    let key = x.split(delimiter)[0];
+    let val = x.split(delimiter)[1];
     console.log(key);
     if (obj[key]) {
       obj[key] = [...obj[key], val];
@@ -103,20 +104,32 @@ const Disperse = () => {
     setDuplicateIndex([]);
   };
 
+  //   let arr =
+  //     val.split("\n").length > 10 ? val.split("\n") : [...Array(10).keys()];
+
+  let arr = val.split("\n");
   return (
     <div>
       <Typography sx={{ color: "grey" }}>Addresses with Amounts</Typography>
-      <TextField
-        onChange={handleChange}
-        value={val}
-        multiline
-        rows={8}
-        // variant="filled"
-        fullWidth
-        sx={{
-          fontWeight: "600 !important",
-        }}
-      />
+      <Box sx={{ display: "flex" }}>
+        <Box sx={{ p: "1rem 1rem 0 1rem", background: "whitesmoke" }}>
+          {arr.map((x, i) => (
+            <li style={{ listStyle: "none", marginBottom: "5px" }}>{i + 1}</li>
+          ))}
+        </Box>
+        <TextField
+          onChange={handleChange}
+          value={val}
+          multiline
+          rows={val.split("\n").length > 8 ? val.split("\n").length : 8}
+          // variant="filled"
+          fullWidth
+          sx={{
+            fontWeight: "600 !important",
+            backgroundColor: 'whitesmoke'
+          }}
+        />
+      </Box>
       <Typography sx={{ color: "grey" }}>
         Separated by ',' or ' ' or '='
       </Typography>
