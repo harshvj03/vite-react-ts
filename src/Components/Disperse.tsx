@@ -88,7 +88,7 @@ const Disperse = () => {
     setVal(ans);
     setError("");
     setDuplicateIndex([]);
-    setIsSuccess(true);
+    // setIsSuccess(true);
   };
 
   const obj: any = {};
@@ -115,7 +115,7 @@ const Disperse = () => {
     setVal(a.join("\n"));
     setError("");
     setDuplicateIndex([]);
-    setIsSuccess(true);
+    // setIsSuccess(true);
     const uniqueObj: any = {};
     for (const key in obj) {
       if (Object.hasOwnProperty.call(obj, key)) {
