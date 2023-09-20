@@ -1,6 +1,6 @@
 import { Alert, Box, Button, TextField, Typography } from "@mui/material";
 import React, { useState } from "react";
-import { sumOfArray, validateAmount } from "../utils";
+import { removeDuplicates, sumOfArray, validateAmount } from "../utils";
 
 const Disperse = () => {
   let delimiter = /[=,\s|]/;
@@ -9,13 +9,17 @@ const Disperse = () => {
   const [val, setVal] = useState<string>("");
 
   const [duplicateIndex, setDuplicateIndex] = useState<number[]>([]);
+  const [isSuccess, setIsSuccess] = useState<boolean>(false);
 
   const handleChange = (e: any) => {
+    setIsSuccess(false);
     setVal(e.target.value);
   };
 
   function validateAddress(arr: string[]) {
     let address: string[] = [];
+    let duplicateAddress: string[] = [];
+    let lines: number[] = [];
     let err = "";
     arr.forEach((x) => {
       address.push(x.split(" ")[0]);
@@ -27,7 +31,9 @@ const Disperse = () => {
         index = i;
         duplicateIndexArr.push(index);
         setDuplicateIndex([...duplicateIndex, index]);
-        setError(`Duplicate address ${address[index]} at line ${index + 1}`);
+        duplicateAddress.push(address[index]);
+        lines.push(index + 1);
+        // setError(`Duplicate address ${address[index]} at line ${index + 1}`);
       }
 
       return address.indexOf(x) !== i;
@@ -35,6 +41,11 @@ const Disperse = () => {
     if (duplicateIndexArr.length === 0) {
       setError("");
       setDuplicateIndex([]);
+    } else {
+      let err = `Duplicate Address ${duplicateAddress.join(
+        ", "
+      )} on lines ${lines.join(", ")}`;
+      setError(err);
     }
   }
 
@@ -76,6 +87,7 @@ const Disperse = () => {
     setVal(ans);
     setError("");
     setDuplicateIndex([]);
+    setIsSuccess(true);
   };
 
   const obj: any = {};
@@ -102,6 +114,16 @@ const Disperse = () => {
     setVal(a.join("\n"));
     setError("");
     setDuplicateIndex([]);
+    setIsSuccess(true);
+    const uniqueObj: any = {};
+    for (const key in obj) {
+      if (Object.hasOwnProperty.call(obj, key)) {
+        const unique = removeDuplicates(obj[key]);
+        uniqueObj[key] = unique;
+      }
+    }
+
+    console.log(uniqueObj);
   };
 
   //   let arr =
@@ -126,7 +148,7 @@ const Disperse = () => {
           fullWidth
           sx={{
             fontWeight: "600 !important",
-            backgroundColor: 'whitesmoke'
+            backgroundColor: "whitesmoke",
           }}
         />
       </Box>
@@ -160,6 +182,12 @@ const Disperse = () => {
       {error && (
         <Alert sx={{ mt: "1rem" }} severity="error">
           {error}
+        </Alert>
+      )}
+
+      {isSuccess && (
+        <Alert sx={{ mt: "1rem" }} severity="success">
+          {"Input accepted"}
         </Alert>
       )}
       <Button
