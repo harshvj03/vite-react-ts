@@ -41,6 +41,7 @@ const Disperse = () => {
     if (duplicateIndexArr.length === 0) {
       setError("");
       setDuplicateIndex([]);
+      setIsSuccess(true);
     } else {
       let err = `Duplicate Address ${duplicateAddress.join(
         ", "
