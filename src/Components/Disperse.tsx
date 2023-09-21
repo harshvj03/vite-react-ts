@@ -43,10 +43,15 @@ const Disperse = () => {
       setDuplicateIndex([]);
       setIsSuccess(true);
     } else {
-      let err = `Duplicate Address ${duplicateAddress.join(
-        ", "
-      )} on lines ${lines.join(", ")}`;
-      setError(err);
+      //   let err = `Duplicate Address ${duplicateAddress.join(
+      //     ", "
+      //   )} on lines ${lines.join(", ")}`;
+      let err: string[] = [];
+      for (let i = 0; i < duplicateAddress.length; i++) {
+        let errMessage = `Address ${duplicateAddress[i]} encountered duplicate in line : ${lines[i]}`;
+        err.push(errMessage);
+      }
+      setError(err.join("\n"));
     }
   }
 
@@ -168,8 +173,9 @@ const Disperse = () => {
                 sx={{ color: "red", textTransform: "none" }}
                 onClick={keepFirstOne}
               >
-                Keep the first one{" "}
+                Keep the first one    
               </Button>
+              <span style={{color: 'red'}}>|</span>
               <Button
                 sx={{ color: "red", textTransform: "none" }}
                 onClick={combineBalances}
